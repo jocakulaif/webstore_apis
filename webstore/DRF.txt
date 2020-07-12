@@ -1,0 +1,45 @@
+DRF -> Django Rest Framework
+is an "app" like any other app and it's a toolkit to build REST WebAPI in django
+
+pip install djangorestframework
+add INSTALLED_APPS : 'rest_framework',
+
+StepbyStep
+1. Create Serializer
+    from rest_framework.serializer import Serializer
+    from .models import Xxxx
+
+    class XxxxSerializer(Serializer)
+        fields declaration
+        ...
+
+        def create(self, validated_data)
+            return Xxxxx.objects.create(**validated_data)
+
+        def update(self, instance, validated_data)
+            instance.field_name = validated_data.get('field_name', instance.field_name)
+            ...
+            instance.save()
+
+when retrieving data
+    from rest_framework.renderers import JSONRenderer
+    queryset -> serializer (known as serialization) -> JsonRenderer().render(serializer.data)
+
+when receiveng data
+    import io
+    from rest_framework.parsers import JSONParser
+    stream = io.BytesIO(json_Data)
+    request -> serializer (know as deserialization) -> instance.save()
+
+
+Serializer validation
+=====================
+    Object Level:
+        def validate(self, data)
+            field_value = data['{field}']
+            raise serializer.ValidationError({message})
+
+    Field Level:
+        def validade_{field}(self, value):
+            field_value = value
+            raise serializer.ValidationError({message})
